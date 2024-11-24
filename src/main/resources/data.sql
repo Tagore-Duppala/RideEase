@@ -1,0 +1,107 @@
+INSERT INTO app_user(name,email,password) VALUES
+('Alice','alice@gmail.com','!pass1234'),
+('Bob','bob@gmail.com','@secure#567'),
+('Charlie','charlie@gmail.com','$$$MyPass!'),
+('Diana','diana@gmail.com','1234!secure$$'),
+('Ethan','ethan@gmail.com','pass#0987$!'),
+('Fiona','fiona@gmail.com','!Secret*4567'),
+('George','george@gmail.com','@@pass987!'),
+('Hannah','hannah@gmail.com','$1234@Secure!'),
+('Ivy','ivy@gmail.com','!PassWord#1$'),
+('Jack','jack@gmail.com','$$$strong&pass!'),
+('Kylie','kylie@gmail.com','@mySecret^890'),
+('Liam','liam@gmail.com','!pass123@456'),
+('Mia','mia@gmail.com','secure#$$789!'),
+('Noah','noah@gmail.com','@Password!4321'),
+('Olivia','olivia@gmail.com','$$!mySecret#5'),
+('Parker','parker@gmail.com','securePass$$!12'),
+('Quinn','quinn@gmail.com','1234$$$@Password!'),
+('Rachel','rachel@gmail.com','!Secret@3456$'),
+('Sam','sam@gmail.com','pass@!6789$$'),
+('Tina','tina@gmail.com','!strong@pass1234'),
+('Ursula','ursula@gmail.com','secure$@5678!'),
+('Victor','victor@gmail.com','@pass123$$!'),
+('Wendy','wendy@gmail.com','$$!password#456'),
+('Xander','xander@gmail.com','@Secret*8901'),
+('Yara','yara@gmail.com','!MyPass#2345'),
+('Zoe','zoe@gmail.com','$$$SecurePass!'),
+('Amy','amy@gmail.com','1234$$!@Secure'),
+('Brian','brian@gmail.com','@mySecret123!'),
+('Catherine','catherine@gmail.com','$$Password#789!'),
+('David','david@gmail.com','!strong@pass4567'),
+('Ella','ella@gmail.com','secure#$$123!'),
+('Frank','frank@gmail.com','!pass#5678@');
+
+INSERT INTO user_roles(user_id, roles) VALUES
+(1, 'RIDER'),
+(2, 'RIDER'),
+(2, 'DRIVER'),
+(3, 'RIDER'),
+(3, 'DRIVER'),
+(4, 'RIDER'),
+(4, 'DRIVER'),
+(5, 'RIDER'),
+(5, 'DRIVER'),
+(6, 'RIDER'),
+(6, 'DRIVER'),
+(7, 'RIDER'),
+(7, 'DRIVER'),
+(8, 'RIDER'),
+(8, 'DRIVER'),
+(9, 'RIDER'),
+(9, 'DRIVER'),
+(10, 'RIDER'),
+(10, 'DRIVER'),
+(11, 'RIDER'),
+(11, 'DRIVER'),
+(12, 'RIDER'),
+(12, 'DRIVER'),
+(13, 'RIDER'),
+(13, 'DRIVER'),
+(14, 'RIDER'),
+(14, 'DRIVER'),
+(15, 'RIDER'),
+(15, 'DRIVER'),
+(16, 'RIDER'),
+(16, 'DRIVER'),
+(17, 'RIDER'),
+(17, 'DRIVER'),
+(18, 'RIDER'),
+(18, 'DRIVER'),
+(19, 'RIDER'),
+(19, 'DRIVER'),
+(20, 'RIDER'),
+(20, 'DRIVER');
+
+
+INSERT INTO rider(id, user_id, rating) VALUES
+(1,1,4.6);
+
+INSERT INTO driver(id,user_id,rating,   available,current_location) VALUES
+(3, 3, 4.5, true, ST_GeomFromText('POINT(83.897200 18.296500)', 4326)),
+(2, 2, 4.8, true, ST_GeomFromText('POINT(83.895900 18.295800)', 4326)),
+(5, 5, 4.6, false, ST_GeomFromText('POINT(83.894600 18.297100)', 4326)),
+(6, 6, 4.2, true, ST_GeomFromText('POINT(83.898000 18.298000)', 4326)),
+(7, 7, 4.9, true, ST_GeomFromText('POINT(83.899500 18.296300)', 4326)),
+(8, 8, 4.3, false, ST_GeomFromText('POINT(83.896000 18.297800)', 4326)),
+(9, 9, 4.1, true, ST_GeomFromText('POINT(83.897800 18.295300)', 4326)),
+(10, 10, 4.7, true, ST_GeomFromText('POINT(83.895300 18.296200)', 4326)),
+(11, 11, 4.4, false, ST_GeomFromText('POINT(83.895000 18.298500)', 4326)),
+(12, 12, 4.6, true, ST_GeomFromText('POINT(83.896800 18.297600)', 4326)),
+(13, 13, 4.8, true, ST_GeomFromText('POINT(83.894900 18.296700)', 4326)),
+(14, 14, 4.3, false, ST_GeomFromText('POINT(83.898200 18.295900)', 4326)),
+(15, 15, 4.5, true, ST_GeomFromText('POINT(83.897500 18.298200)', 4326)),
+(16, 16, 4.2, true, ST_GeomFromText('POINT(83.895700 18.297900)', 4326)),
+(17, 17, 4.6, false, ST_GeomFromText('POINT(83.896500 18.296800)', 4326)),
+(18, 18, 4.9, true, ST_GeomFromText('POINT(83.894300 18.295700)', 4326)),
+(19, 19, 4.1, true, ST_GeomFromText('POINT(83.896200 18.298400)', 4326)),
+(20, 20, 4.4, false, ST_GeomFromText('POINT(83.897300 18.295200)', 4326));
+
+INSERT INTO wallet(id, user_id, balance) VALUES
+(1,1,2000.0),
+(2,3,150.0);
+
+
+
+--INSERT INTO ride_request(drop_location,fare,pick_up_location) VALUES
+--(ST_GeomFromText('POINT(83.894300 18.295700)', 4326),20.3,ST_GeomFromText('POINT(83.894300 18.295700)', 4326));
