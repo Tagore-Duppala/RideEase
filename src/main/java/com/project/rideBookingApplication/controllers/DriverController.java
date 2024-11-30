@@ -12,7 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "/drivers")
+@RequestMapping(path = "/driver")
 @RequiredArgsConstructor
 public class DriverController {
 

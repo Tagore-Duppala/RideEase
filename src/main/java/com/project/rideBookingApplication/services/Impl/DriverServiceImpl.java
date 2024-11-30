@@ -11,7 +11,6 @@ import com.project.rideBookingApplication.entities.enums.RideStatus;
 import com.project.rideBookingApplication.repositories.DriverRepository;
 import com.project.rideBookingApplication.repositories.RideRepository;
 import com.project.rideBookingApplication.services.*;
-import com.project.uber.uberApplication.services.*;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;

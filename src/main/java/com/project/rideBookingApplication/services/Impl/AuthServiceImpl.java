@@ -13,6 +13,7 @@ import com.project.rideBookingApplication.services.RiderService;
 import com.project.rideBookingApplication.services.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final RiderService riderService;
     private final WalletService walletService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public void login(String email, String password) {
@@ -41,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = modelMapper.map(signUpDto,User.class);
         user.setRoles(Set.of(Role.RIDER));
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         User savedUser = userRepository.save(user); //saving details in user entity
         Rider rider=riderService.createNewRider(user); //create new rider, saving in rider entity
