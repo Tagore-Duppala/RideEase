@@ -1,10 +1,10 @@
 package com.project.rideBookingApplication.controllers;
 
-import com.project.rideBookingApplication.dto.DriverDto;
-import com.project.rideBookingApplication.dto.OnboardNewDriverDto;
-import com.project.rideBookingApplication.dto.SignUpDto;
-import com.project.rideBookingApplication.dto.UserDto;
+import com.project.rideBookingApplication.dto.*;
 import com.project.rideBookingApplication.services.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,6 +24,21 @@ public class AuthContorller {
     @PostMapping("/onboardNewDriver/{userId}")
     public ResponseEntity<DriverDto> onboardNewDriver(@PathVariable Long userId, @RequestBody OnboardNewDriverDto onboardNewDriverDto){
         return ResponseEntity.ok(authService.onboardNewDriver(userId,onboardNewDriverDto.getVehicleId()));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto
+                                                    , HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
+        String[] tokens = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
+        String accessToken = tokens[0];
+        Cookie cookie = new Cookie("refreshToken",tokens[1]);
+        cookie.setHttpOnly(true);
+
+        httpServletResponse.addCookie(cookie);
+
+        return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
+
     }
 
 }

@@ -1,10 +1,7 @@
 package com.project.rideBookingApplication.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 @Entity
@@ -15,6 +12,7 @@ import org.locationtech.jts.geom.Point;
 @Table(indexes = {
         @Index(name = "idx_vehicleId", columnList = "vehicleId")
 })
+@Builder
 public class Driver {
 
     @Id

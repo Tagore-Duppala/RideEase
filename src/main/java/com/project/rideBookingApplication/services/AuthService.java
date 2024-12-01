@@ -6,12 +6,12 @@ import com.project.rideBookingApplication.dto.UserDto;
 
 public interface AuthService {
 
-    void login(String email, String password);
+    String[] login(String email, String password);
 
     UserDto signup(SignUpDto signUpDto);
 
     DriverDto onboardNewDriver(Long UserId, String vehicleId);
 
-
+    String refreshToken(String refreshToken);
 
 }
