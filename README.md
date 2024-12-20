@@ -1,6 +1,6 @@
 # RideEase - Ride Booking Application (Spring Boot)
 
-RideEase is an innovative ride booking platform tailored to connect travelers with reliable transportation solutions effortlessly. Whether you're a commuter seeking a hassle-free ride or a driver aiming to maximize earnings, RideEase provides a seamless, intuitive, and secure environment for all. With its robust multi-user system, dedicated admin panels, and user-friendly features, RideEase transforms the traditional ride-hailing experience into a smarter and more efficient journey. By focusing on convenience, reliability, and community, RideEase redefines urban mobility for everyone involved.
+RideEase is an innovative ride-booking platform tailored to effortlessly connect travellers with reliable transportation solutions. Whether you're a commuter seeking a hassle-free ride or a driver aiming to maximize earnings, RideEase provides a seamless, intuitive, and secure environment for all. With its robust multi-user system, dedicated admin panels, and user-friendly features, RideEase transforms the traditional ride-hailing experience into a smarter and more efficient journey. By focusing on convenience, reliability, and community, RideEase redefines urban mobility for everyone involved.
 
 
 # Live Demo | API Documentation(Swagger)
@@ -21,9 +21,9 @@ RideEase is an innovative ride booking platform tailored to connect travelers wi
 # Security Features:
 
 - **Authentication**: JWT tokens are used for secure authentication and session management.
-- 
+  
 - **Authorization**: Role-based access control is implemented to manage permissions, ensuring that only authorized users can perform specific actions.
-- 
+  
 - **Data Encryption**: Sensitive data, including passwords and payment details, is encrypted to protect user information from unauthorized access.
 
 # Technologies Used:
