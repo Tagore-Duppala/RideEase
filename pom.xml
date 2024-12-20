@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.codingshuttle.project.uber</groupId>
-	<artifactId>rideBookingApplication</artifactId>
+	<artifactId>rideEase</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>uberApplication</name>
 	<description>Uber project for Spring Boot</description>
