@@ -55,10 +55,35 @@ FoodCart reflects my passion for coding and my commitment to developing practica
 - **OSRM API**
 
 ## Installation and Setup
-Clone the repository to your local computer.
+- **Clone the repository to your local computer**:
 ```
-
 git clone https://github.com/Tagore-Duppala/RideBookingApplication.git
 ```
 
+- **Configure the Database**:
+```
+spring.datasource.url=jdbc:postgresql://localhost:5432/your_database_name
+spring.datasource.username= your_username
+spring.datasource.password= your_password
+```
+
+- **Access FoodCart**:
+```
+Open your browser and go to http://localhost:8080
+```
+
+# Contribute:
+
+Feel free to contribute to this project by submitting issues, suggesting features, or creating pull requests. Your input is valuable to make this tool even better! 😃
+
+# Planned Future Enhancements:
+
+- **Password Reset via Email**: Implementing a secure and convenient method for users to reset their passwords through email.
+- **UI/UX Improvements**: Introducing a responsive and visually appealing frontend interface to complement the backend functionalities.
+- **Payment service additions**: Adding more payment services using Razorpay API.
+- **RideFareCalculationStrategy**: Adding more fare calculating strategies for more accurate pricing.
+- **Review System Enhancements**: Improving the rating system to include reviews and more granular feedback options, verified reviews.
+
+# Feedback
+I appreciate your feedback! Please open an issue on GitHub if you encounter any problems or have suggestions for improvement. Your feedback helps enhance the project for everyone. Please reach out to me at duppalatagore@gmail.com
 
