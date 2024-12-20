@@ -33,6 +33,9 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 - **Authentication**: JWT, Spring Security
 - **Notifications**: Email notifications for ride confirmations and ride requests
 
-  
-  
+# Project Description:
+ # Controllers:
+
+
+ # Database Diagram:  
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
