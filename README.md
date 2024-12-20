@@ -25,5 +25,14 @@ RideEase is an innovative ride booking platform tailored to connect travelers wi
 - **Authorization**: Role-based access control is implemented to manage permissions, ensuring that only authorized users can perform specific actions.
 - 
 - **Data Encryption**: Sensitive data, including passwords and payment details, is encrypted to protect user information from unauthorized access.
-- 
+
+# Technologies Used:
+
+- **Back-End**: Spring Boot, Spring Security, Spring Data JPA
+- **Database**: Postgres
+- **Authentication**: JWT, Spring Security
+- **Notifications**: Email notifications for ride confirmations and ride requests
+
+  
+  
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
