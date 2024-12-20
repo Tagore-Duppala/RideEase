@@ -43,3 +43,22 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 
 ## Database Diagram:  
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
+
+# Why I Created This Project:
+FoodCart reflects my passion for coding and my commitment to developing practical solutions that can have a positive impact on users' daily lives. It’s a project that merges my technical skills with my enthusiasm for solving real-world problems in the food industry.
+
+# Getting Started:
+## Prerequisites:
+- **Java 17+**
+- **Postgres**
+- **Maven**
+- **OSRM API**
+
+## Installation and Setup
+Clone the repository to your local computer.
+```
+
+git clone https://github.com/Tagore-Duppala/RideBookingApplication.git
+```
+
+
