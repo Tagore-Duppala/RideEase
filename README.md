@@ -8,7 +8,7 @@ RideEase is an innovative ride booking platform tailored to connect travelers wi
 
 # Key Features of RideEase:
 
-**Multi-Driver Support**: A dynamic platform where multiple drivers can register and offer their services, giving riders access to a variety of transportation options.
+- **Multi-Driver Support**: A dynamic platform where multiple drivers can register and offer their services, giving riders access to a variety of transportation options.
 
 **Role-Based Access Control**: Securely manage different user roles (admin, driver, passenger) to ensure a controlled and safe environment for all participants.
 
