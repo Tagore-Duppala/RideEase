@@ -18,4 +18,12 @@ RideEase is an innovative ride booking platform tailored to connect travelers wi
 
 - **Trip History**: Riders and drivers can view detailed records of past trips, including dates, destinations, and payments, for reference and convenience.
 
+# Security Features:
+
+- **Authentication**: JWT tokens are used for secure authentication and session management.
+- 
+- **Authorization**: Role-based access control is implemented to manage permissions, ensuring that only authorized users can perform specific actions.
+- 
+- **Data Encryption**: Sensitive data, including passwords and payment details, is encrypted to protect user information from unauthorized access.
+- 
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
