@@ -32,7 +32,7 @@ public class GlobalExceptionHandler {
                 .message(resourceNotFoundException.getMessage())
                 .createdTimestamp(new Date())
                 .build();
-        return new ResponseEntity<ApiError>(apiError,HttpStatus.CONFLICT);
+        return new ResponseEntity<ApiError>(apiError,HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(AuthenticationException.class)
@@ -40,6 +40,7 @@ public class GlobalExceptionHandler {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.UNAUTHORIZED)
                 .message(ex.getMessage())
+                .createdTimestamp(new Date())
                 .build();
         return new ResponseEntity<ApiError>(apiError, HttpStatus.UNAUTHORIZED);
     }
@@ -49,6 +50,7 @@ public class GlobalExceptionHandler {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.UNAUTHORIZED)
                 .message(ex.getMessage())
+                .createdTimestamp(new Date())
                 .build();
         return new ResponseEntity<ApiError>(apiError, HttpStatus.UNAUTHORIZED);
     }
@@ -58,6 +60,7 @@ public class GlobalExceptionHandler {
         ApiError apiError = ApiError.builder()
                 .status(HttpStatus.FORBIDDEN)
                 .message(ex.getMessage())
+                .createdTimestamp(new Date())
                 .build();
         return new ResponseEntity<ApiError>(apiError, HttpStatus.FORBIDDEN);
     }

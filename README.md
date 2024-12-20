@@ -34,8 +34,12 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 - **Notifications**: Email notifications for ride confirmations and ride requests
 
 # Project Description:
- ## Controllers:
+## Controllers:
+
+- **Auth Controller**: Handles user authentication using JWT token for login and signup.
+- **Driver Controller**: Allows drivers to manage actions such as accepting, cancelling, ending the ride, rating rider and getting historical rides.
+- **Rider Controller**:  Allows riders to manage actions such as requesting ride, cancelling ride & ride request, rating driver and getting historical rides.
 
 
- ## Database Diagram:  
+## Database Diagram:  
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
