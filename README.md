@@ -32,6 +32,7 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 - **Database**: Postgres
 - **Authentication**: JWT, Spring Security
 - **Notifications**: Email notifications for ride confirmations and ride requests
+- **APIs**: OSRM
 
 # Project Description:
 ## Controllers:
@@ -67,7 +68,7 @@ spring.datasource.username= your_username
 spring.datasource.password= your_password
 ```
 
-- **Access FoodCart**:
+- **Access RideEase**:
 ```
 Open your browser and go to http://localhost:8080
 ```
