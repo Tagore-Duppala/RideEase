@@ -10,12 +10,12 @@ RideEase is an innovative ride booking platform tailored to connect travelers wi
 
 - **Multi-Driver Support**: A dynamic platform where multiple drivers can register and offer their services, giving riders access to a variety of transportation options.
 
-**Role-Based Access Control**: Securely manage different user roles (admin, driver, passenger) to ensure a controlled and safe environment for all participants.
+- **Role-Based Access Control**: Securely manage different user roles (admin, driver, passenger) to ensure a controlled and safe environment for all participants.
 
-**Real-Time Notifications**: Riders and drivers receive instant email notifications for ride requests, confirmations, cancellations, and updates.
+- **Real-Time Notifications**: Riders and drivers receive instant email notifications for ride requests, confirmations, cancellations, and updates.
 
-**Rating System**: Riders and drivers can provide ratings to maintain transparency and continually improve service quality.
+- **Rating System**: Riders and drivers can provide ratings to maintain transparency and continually improve service quality.
 
-**Trip History**: Riders and drivers can view detailed records of past trips, including dates, destinations, and payments, for reference and convenience.
+- **Trip History**: Riders and drivers can view detailed records of past trips, including dates, destinations, and payments, for reference and convenience.
 
 ![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
