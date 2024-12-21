@@ -14,6 +14,7 @@ import com.project.rideEase.repositories.DriverRepository;
 import com.project.rideEase.repositories.RideRepository;
 import com.project.rideEase.services.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
@@ -33,9 +35,10 @@ public class DriverServiceImpl implements DriverService {
     private final RideRequestService rideRequestService;
     private final PaymentService paymentService;
     private final RatingService ratingService;
-    private final RideRepository rideRepository;
+    private final EmailSenderService emailSenderService;
 
     @Override
+    @Transactional
     public RideDto startRide(Long rideId, String otp) {
 
         Ride findRide = rideService.getRideById(rideId);
@@ -48,6 +51,7 @@ public class DriverServiceImpl implements DriverService {
         rideService.updateRideStatus(findRide,RideStatus.ONGOING);
         ratingService.createNewRating(findRide);
 
+        log.info("Ride started with ride id: "+rideId);
        return modelMapper.map(findRide,RideDto.class);
     }
 
@@ -65,11 +69,13 @@ public class DriverServiceImpl implements DriverService {
         updateDriverAvailability(findRide.getDriver(),true);
 
         paymentService.processPayment(findRide);
+        log.info("Ride completed");
 
         return modelMapper.map(savedRide,RideDto.class);
     }
 
     @Override
+    @Transactional
     public RideDto cancelRide(Long rideId) {
 
         Ride ride = rideService.getRideById(rideId);
@@ -80,8 +86,9 @@ public class DriverServiceImpl implements DriverService {
 
         rideService.updateRideStatus(ride,RideStatus.CANCELLED);
         updateDriverAvailability(driver,true);
-        return  modelMapper.map(ride,RideDto.class);
+        log.info("Ride cancelled with id: "+rideId);
 
+        return  modelMapper.map(ride,RideDto.class);
     }
 
     @Override
@@ -118,6 +125,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    @Transactional
     public RideDto acceptRide(Long rideRequestId) {
         RideRequest rideRequest = rideRequestService.findRideRequestById(rideRequestId);
         if(!rideRequest.getRideRequestStatus().equals(RideRequestStatus.SEARCHING)) throw new RuntimeException("RideRequest cannot be accepted, status is "+ rideRequest.getRideRequestStatus());
@@ -126,9 +134,10 @@ public class DriverServiceImpl implements DriverService {
         if(!driver.getAvailable()) throw new RuntimeException("Driver cannot accept ride due to unavailability");
 
         Ride newRide = rideService.createNewRide(rideRequest, driver);
-
         updateDriverAvailability(newRide.getDriver(),false);
+        log.info("Ride created! Sending email alert for the rider");
 
+        emailSenderService.sendEmail(rideRequest.getRider().getUser().getEmail(), emailSubjectForAcceptRide(rideRequest), emailBodyForAcceptRide(rideRequest, newRide));
         return modelMapper.map(newRide, RideDto.class);
 
     }
@@ -144,5 +153,32 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Driver createNewDriver(Driver newDriver) {
         return driverRepository.save(newDriver);
+    }
+
+    @Override
+    public String emailSubjectForAcceptRide(RideRequest rideRequest) {
+        return "Ride Accepted!";
+    }
+
+    @Override
+    public String emailBodyForAcceptRide(RideRequest rideRequest, Ride ride) {
+
+        String driverName =ride.getDriver().getUser().getName();
+        String vehicleNo = ride.getDriver().getVehicleId();
+        Double fare = rideRequest.getFare();
+        String otp = ride.getOtp();
+        String riderName = rideRequest.getRider().getUser().getName();
+
+        return "<html>" +
+                "<body>" +
+                "<p>Hello,"+ riderName+"</p>" +
+                "<p>Your ride is accepted, Driver is on the way</p>"+
+                "<p>Driver Name: "+driverName+"</p>"+
+                "<p>Vehicle No: "+ vehicleNo+"</p>"+
+                "<p>Fare: "+ fare+"</p>"+
+                "<p>OTP: "+ otp+"</p>"+
+                "<p>Best regards,<br>Team RideEase</p>" + //TO DO, Add customer support link & SOS in the body
+                "</body>" +
+                "</html>";
     }
 }

@@ -2,6 +2,8 @@ package com.project.rideEase.entities;
 
 import com.project.rideEase.entities.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
@@ -25,6 +27,7 @@ public class User implements UserDetails {
     private String name;
 
     @Column(unique = true)
+    @NotBlank(message = "Email is required!")
     private String email;
 
     private String password;

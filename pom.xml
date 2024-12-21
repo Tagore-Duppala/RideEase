@@ -8,11 +8,11 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.codingshuttle.project.uber</groupId>
+	<groupId>com.codingshuttle.project.rideEase</groupId>
 	<artifactId>rideEase</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>uberApplication</name>
-	<description>Uber project for Spring Boot</description>
+	<name>rideEase</name>
+	<description>rideBookingApplication project for Spring Boot</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -93,6 +93,10 @@
 			<artifactId>jjwt-jackson</artifactId>
 			<version>0.12.6</version>
 			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
 		</dependency>
 
 
