@@ -36,7 +36,6 @@ public class RiderServiceImpl implements RiderService {
     private final RideStrategyManager rideStrategyManager;
     private final RideService rideService;
     private final DriverService driverService;
-    private final RideRepository rideRepository;
     private final RatingService ratingService;
     private final EmailSenderService emailSenderService;
 
@@ -67,6 +66,7 @@ public class RiderServiceImpl implements RiderService {
 
 
     @Override
+    @Transactional
     public RideDto cancelRide(Long rideId) {
 
         Rider rider = getCurrentRider();
@@ -83,10 +83,12 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
+    @Transactional
     public RideRequestDto cancelRideRequest(Long rideRequestId) {
         RideRequest rideRequest = rideRequestRepository.findById(rideRequestId)
                 .orElseThrow(()->new ResourceNotFoundException("RideRequest not found with Id: "+rideRequestId));
         if(!rideRequest.getRideRequestStatus().equals(RideRequestStatus.SEARCHING)) throw new RuntimeException("Ride is already booked! Please cancel the ride instead");
+        if(!rideRequest.getRider().equals(getCurrentRider())) throw new RuntimeException("You are not authorized to cancel this ride");
 
         rideRequest.setRideRequestStatus(RideRequestStatus.CANCELLED);
         rideRequestRepository.save(rideRequest);

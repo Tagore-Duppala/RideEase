@@ -29,7 +29,7 @@ public class Rating {
     private Driver driver;
 
     private Double driverRating;
-    private  Double riderRating;
+    private Double riderRating;
 
 
 }

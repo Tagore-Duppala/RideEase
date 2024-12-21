@@ -35,10 +35,10 @@ public class DriverServiceImpl implements DriverService {
     private final RideRequestService rideRequestService;
     private final PaymentService paymentService;
     private final RatingService ratingService;
-    private final RideRepository rideRepository;
     private final EmailSenderService emailSenderService;
 
     @Override
+    @Transactional
     public RideDto startRide(Long rideId, String otp) {
 
         Ride findRide = rideService.getRideById(rideId);
@@ -73,6 +73,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    @Transactional
     public RideDto cancelRide(Long rideId) {
 
         Ride ride = rideService.getRideById(rideId);
@@ -121,6 +122,7 @@ public class DriverServiceImpl implements DriverService {
     }
 
     @Override
+    @Transactional
     public RideDto acceptRide(Long rideRequestId) {
         RideRequest rideRequest = rideRequestService.findRideRequestById(rideRequestId);
         if(!rideRequest.getRideRequestStatus().equals(RideRequestStatus.SEARCHING)) throw new RuntimeException("RideRequest cannot be accepted, status is "+ rideRequest.getRideRequestStatus());
