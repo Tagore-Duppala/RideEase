@@ -26,12 +26,6 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             helper.setSubject(subject);
             helper.setText(body, true);
 
-//            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//
-//            simpleMailMessage.setTo(toEmail);
-//            simpleMailMessage.setSubject(subject);
-//            simpleMailMessage.setText(body);
-
             javaMailSender.send(message);
             log.info("Email sent successfully!");
         }
@@ -52,12 +46,6 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             helper.setTo(toEmail);
             helper.setSubject(subject);
             helper.setText(body, true);
-//            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-//
-//            simpleMailMessage.setTo(toEmail);
-//            simpleMailMessage.setSubject(subject);
-//            simpleMailMessage.setText(body);
-
 
             javaMailSender.send(message);
             log.info("Email sent successfully!");

@@ -11,11 +11,13 @@ import com.project.rideEase.repositories.WalletRepository;
 import com.project.rideEase.services.WalletService;
 import com.project.rideEase.services.WalletTransactionService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class WalletServiceImp implements WalletService {
 
     private final WalletRepository walletRepository;
@@ -40,6 +42,7 @@ public class WalletServiceImp implements WalletService {
         walletTransactionService.createNewWalletTransaction(walletTransaction);
 
         wallet.getTransactions().add(walletTransaction);
+        log.info("Money added to the Wallet");
         return walletRepository.save(wallet);
     }
 
@@ -62,6 +65,7 @@ public class WalletServiceImp implements WalletService {
         walletTransactionService.createNewWalletTransaction(walletTransaction);
 
         wallet.getTransactions().add(walletTransaction);
+        log.info("Money deducted from the wallet");
         return walletRepository.save(wallet);
     }
 

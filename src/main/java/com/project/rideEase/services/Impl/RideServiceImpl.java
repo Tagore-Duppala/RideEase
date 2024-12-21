@@ -10,6 +10,7 @@ import com.project.rideEase.exceptions.ResourceNotFoundException;
 import com.project.rideEase.repositories.RideRepository;
 import com.project.rideEase.services.RideService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,6 +20,7 @@ import java.util.Random;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RideServiceImpl implements RideService {
 
     private final ModelMapper modelMapper;
@@ -41,10 +43,9 @@ public class RideServiceImpl implements RideService {
         ride.setOtp(generateOTP());
         ride.setDriver(driver);
         rideRepository.save(ride);
-
+        log.info("New ride created!");
 
         return ride;
-
     }
 
     @Override
@@ -60,12 +61,14 @@ public class RideServiceImpl implements RideService {
     @Override
     public Ride updateRideStatus(Ride ride, RideStatus rideStatus) {
         ride.setRideStatus(rideStatus);
+        log.info("Ride status updated!");
         return rideRepository.save(ride);
     }
 
     public String generateOTP(){
         Random random = new Random();
         int otp = random.nextInt(10000);
+        log.info("OTP generated");
         return String.format("%04d",otp);
     }
 }

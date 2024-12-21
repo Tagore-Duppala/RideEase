@@ -78,6 +78,7 @@ public class RiderServiceImpl implements RiderService {
         rideService.updateRideStatus(ride,RideStatus.CANCELLED);
         driverService.updateDriverAvailability(ride.getDriver(),true);
 
+        log.info("Ride successfully cancelled by rider with id: "+ rider.getId());
         return modelMapper.map(ride, RideDto.class);
 
     }
@@ -92,6 +93,8 @@ public class RiderServiceImpl implements RiderService {
 
         rideRequest.setRideRequestStatus(RideRequestStatus.CANCELLED);
         rideRequestRepository.save(rideRequest);
+
+        log.info("Ride request successfully cancelled by rider with id: "+ rideRequest.getRider().getId());
         return modelMapper.map(rideRequest,RideRequestDto.class);
     }
 
@@ -102,6 +105,7 @@ public class RiderServiceImpl implements RiderService {
         if(!ride.getRideStatus().equals(RideStatus.ENDED)) throw new RuntimeException("Ride is not yet ended!");
         if(!getCurrentRider().equals(ride.getDriver())) throw new RuntimeException("Ride doesn't belong to current rider");
 
+        log.info("Thanks for you rating and feedback for driver with id: "+ ride.getDriver().getId());
         return ratingService.rateDriver(ride,rating);
     }
 

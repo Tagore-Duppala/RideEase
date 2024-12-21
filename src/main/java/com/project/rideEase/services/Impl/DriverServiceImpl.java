@@ -51,6 +51,7 @@ public class DriverServiceImpl implements DriverService {
         rideService.updateRideStatus(findRide,RideStatus.ONGOING);
         ratingService.createNewRating(findRide);
 
+        log.info("Ride started with ride id: "+rideId);
        return modelMapper.map(findRide,RideDto.class);
     }
 
@@ -68,6 +69,7 @@ public class DriverServiceImpl implements DriverService {
         updateDriverAvailability(findRide.getDriver(),true);
 
         paymentService.processPayment(findRide);
+        log.info("Ride completed");
 
         return modelMapper.map(savedRide,RideDto.class);
     }
@@ -84,8 +86,9 @@ public class DriverServiceImpl implements DriverService {
 
         rideService.updateRideStatus(ride,RideStatus.CANCELLED);
         updateDriverAvailability(driver,true);
-        return  modelMapper.map(ride,RideDto.class);
+        log.info("Ride cancelled with id: "+rideId);
 
+        return  modelMapper.map(ride,RideDto.class);
     }
 
     @Override
