@@ -1,10 +1,11 @@
 package com.project.rideEase.services.Impl;
 
 import com.project.rideEase.services.EmailSenderService;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,13 +19,20 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     public void sendEmail(String toEmail, String subject, String body) {
 
         try{
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            simpleMailMessage.setTo(toEmail);
-            simpleMailMessage.setSubject(subject);
-            simpleMailMessage.setText(body);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(body, true);
 
-            javaMailSender.send(simpleMailMessage);
+//            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//
+//            simpleMailMessage.setTo(toEmail);
+//            simpleMailMessage.setSubject(subject);
+//            simpleMailMessage.setText(body);
+
+            javaMailSender.send(message);
             log.info("Email sent successfully!");
         }
         catch (Exception e){
@@ -37,13 +45,21 @@ public class EmailSenderServiceImpl implements EmailSenderService {
     public void sendEmail(String[] toEmail, String subject, String body) {
 
         try{
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 
-            simpleMailMessage.setTo(toEmail);
-            simpleMailMessage.setSubject(subject);
-            simpleMailMessage.setText(body);
+            MimeMessage message = javaMailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
 
-            javaMailSender.send(simpleMailMessage);
+            helper.setTo(toEmail);
+            helper.setSubject(subject);
+            helper.setText(body, true);
+//            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+//
+//            simpleMailMessage.setTo(toEmail);
+//            simpleMailMessage.setSubject(subject);
+//            simpleMailMessage.setText(body);
+
+
+            javaMailSender.send(message);
             log.info("Email sent successfully!");
         }
         catch (Exception e){

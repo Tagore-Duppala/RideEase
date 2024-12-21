@@ -14,6 +14,7 @@ import com.project.rideEase.repositories.DriverRepository;
 import com.project.rideEase.repositories.RideRepository;
 import com.project.rideEase.services.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,7 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DriverServiceImpl implements DriverService {
 
     private final DriverRepository driverRepository;
@@ -34,6 +36,7 @@ public class DriverServiceImpl implements DriverService {
     private final PaymentService paymentService;
     private final RatingService ratingService;
     private final RideRepository rideRepository;
+    private final EmailSenderService emailSenderService;
 
     @Override
     public RideDto startRide(Long rideId, String otp) {
@@ -126,9 +129,10 @@ public class DriverServiceImpl implements DriverService {
         if(!driver.getAvailable()) throw new RuntimeException("Driver cannot accept ride due to unavailability");
 
         Ride newRide = rideService.createNewRide(rideRequest, driver);
-
         updateDriverAvailability(newRide.getDriver(),false);
+        log.info("Ride created! Sending email alert for the rider");
 
+        emailSenderService.sendEmail(rideRequest.getRider().getUser().getEmail(), emailSubjectForAcceptRide(rideRequest), emailBodyForAcceptRide(rideRequest, newRide));
         return modelMapper.map(newRide, RideDto.class);
 
     }
@@ -144,5 +148,32 @@ public class DriverServiceImpl implements DriverService {
     @Override
     public Driver createNewDriver(Driver newDriver) {
         return driverRepository.save(newDriver);
+    }
+
+    @Override
+    public String emailSubjectForAcceptRide(RideRequest rideRequest) {
+        return "Ride Accepted!";
+    }
+
+    @Override
+    public String emailBodyForAcceptRide(RideRequest rideRequest, Ride ride) {
+
+        String driverName =ride.getDriver().getUser().getName();
+        String vehicleNo = ride.getDriver().getVehicleId();
+        Double fare = rideRequest.getFare();
+        String otp = ride.getOtp();
+        String riderName = rideRequest.getRider().getUser().getName();
+
+        return "<html>" +
+                "<body>" +
+                "<p>Hello,"+ riderName+"</p>" +
+                "<p>Your ride is accepted, Driver is on the way</p>"+
+                "<p>Driver Name: "+driverName+"</p>"+
+                "<p>Vehicle No: "+ vehicleNo+"</p>"+
+                "<p>Fare: "+ fare+"</p>"+
+                "<p>OTP: "+ otp+"</p>"+
+                "<p>Best regards,<br>Team RideEase</p>" + //TO DO, Add customer support link & SOS in the body
+                "</body>" +
+                "</html>";
     }
 }

@@ -84,6 +84,7 @@ Feel free to contribute to this project by submitting issues, suggesting feature
 - **Payment service additions**: Adding more payment services using Razorpay API.
 - **RideFareCalculationStrategy**: Adding more fare calculating strategies for more accurate pricing.
 - **Review System Enhancements**: Improving the rating system to include reviews and more granular feedback options, verified reviews.
+- **More Transport Modes**: Bringing more transportation modes, ride sharing options and rentals.
 
 # Feedback
 I appreciate your feedback! Please open an issue on GitHub if you encounter any problems or have suggestions for improvement. Your feedback helps enhance the project for everyone. Please reach out to me at duppalatagore@gmail.com

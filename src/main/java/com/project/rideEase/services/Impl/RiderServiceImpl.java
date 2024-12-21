@@ -4,29 +4,26 @@ import com.project.rideEase.dto.DriverDto;
 import com.project.rideEase.dto.RideDto;
 import com.project.rideEase.dto.RideRequestDto;
 import com.project.rideEase.dto.RiderDto;
-import com.project.rideEase.entities.Ride;
-import com.project.rideEase.entities.RideRequest;
-import com.project.rideEase.entities.Rider;
-import com.project.rideEase.entities.User;
+import com.project.rideEase.entities.*;
 import com.project.rideEase.entities.enums.RideRequestStatus;
 import com.project.rideEase.entities.enums.RideStatus;
 import com.project.rideEase.exceptions.ResourceNotFoundException;
 import com.project.rideEase.repositories.RideRepository;
 import com.project.rideEase.repositories.RideRequestRepository;
 import com.project.rideEase.repositories.RiderRepository;
-import com.project.rideEase.services.DriverService;
-import com.project.rideEase.services.RatingService;
-import com.project.rideEase.services.RideService;
-import com.project.rideEase.services.RiderService;
+import com.project.rideEase.services.*;
 import com.project.rideEase.stratagies.RideStrategyManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -41,13 +38,13 @@ public class RiderServiceImpl implements RiderService {
     private final DriverService driverService;
     private final RideRepository rideRepository;
     private final RatingService ratingService;
+    private final EmailSenderService emailSenderService;
 
     @Override
     @Transactional
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
         Rider rider  = getCurrentRider();
         RideRequest rideRequest = modelMapper.map(rideRequestDto,RideRequest.class); //for converting PointDto in riderrqstDto to Point in RideRequestEnitiy we define a typematch in mapperconfig
-//        log.info("Ride request ----------> ",rideRequest);
         rideRequest.setRideRequestStatus(RideRequestStatus.SEARCHING);
 
         Double fare = rideStrategyManager.rideFareCalculationStrategy().calculateFare(rideRequest);
@@ -57,8 +54,14 @@ public class RiderServiceImpl implements RiderService {
 
         RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
 
-        rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(savedRideRequest);
+        List<Driver> drivers= rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(savedRideRequest);
+        List<String> driversEmail = drivers.stream()
+                .map(driverslist-> driverslist.getUser().getEmail())
+                .toList();
 
+        log.info("List of driver emails: "+driversEmail);
+
+        emailSenderService.sendEmail(driversEmail.toArray(new String[0]),emailSubjectForRideRequest(rideRequest),emailBodyForRideRequest(rideRequest));
         return modelMapper.map(savedRideRequest,RideRequestDto.class);
     }
 
@@ -127,4 +130,34 @@ public class RiderServiceImpl implements RiderService {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return riderRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException("Rider not found with userId :"+user.getId()));
     }
+
+    @Override
+    public String emailBodyForRideRequest(RideRequest rideRequest) {
+
+        Point pickUpLocation = rideRequest.getPickUpLocation();
+        Point dropLocation = rideRequest.getDropLocation();
+        Double fare = rideRequest.getFare();
+        String acceptRideUrl = "http://localhost:8080/driver/acceptRide/"+rideRequest.getId(); //TO DO after deploying into AWS
+
+        return "<html>" +
+                "<body>" +
+                "<p>Hello,</p>" +
+                "<p>New Ride requested, Below are the details</p>"+
+                "<p>Pickup Location: "+pickUpLocation+"</p>"+
+                "<p>Drop Location: "+ dropLocation+"</p>"+
+                "<p>Fare: "+ fare+"</p>"+
+                "<p>Click the following link to accept the ride:</p>" +
+                "<a href=\"" + acceptRideUrl + "\">Accept Ride</a>" +
+                "<p>Best regards,<br>Team RideEase</p>" +
+                "</body>" +
+                "</html>"
+                ;
+    }
+
+    @Override
+    public String emailSubjectForRideRequest(RideRequest rideRequest) {
+        return "New Ride Requested, Fare: "+rideRequest.getFare();
+    }
+
+
 }

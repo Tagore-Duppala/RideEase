@@ -4,6 +4,7 @@ import com.project.rideEase.dto.DriverDto;
 import com.project.rideEase.dto.RideDto;
 import com.project.rideEase.dto.RideRequestDto;
 import com.project.rideEase.dto.RiderDto;
+import com.project.rideEase.entities.RideRequest;
 import com.project.rideEase.entities.Rider;
 import com.project.rideEase.entities.User;
 import org.springframework.data.domain.Page;
@@ -26,4 +27,8 @@ public interface RiderService {
     Rider createNewRider(User user);
 
     Rider getCurrentRider();
+
+    String emailBodyForRideRequest(RideRequest rideRequest);
+
+    String emailSubjectForRideRequest(RideRequest rideRequest);
 }

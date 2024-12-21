@@ -4,6 +4,8 @@ import com.project.rideEase.dto.DriverDto;
 import com.project.rideEase.dto.RideDto;
 import com.project.rideEase.dto.RiderDto;
 import com.project.rideEase.entities.Driver;
+import com.project.rideEase.entities.Ride;
+import com.project.rideEase.entities.RideRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
@@ -28,5 +30,9 @@ public interface DriverService {
     void updateDriverAvailability(Driver driver, Boolean status);
 
     Driver createNewDriver(Driver newDriver);
+
+    String emailSubjectForAcceptRide(RideRequest rideRequest);
+
+    String emailBodyForAcceptRide(RideRequest rideRequest, Ride ride);
 
 }
