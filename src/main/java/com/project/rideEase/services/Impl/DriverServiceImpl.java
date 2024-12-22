@@ -22,7 +22,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -65,8 +67,12 @@ public class DriverServiceImpl implements DriverService {
         if(!findRide.getRideStatus().equals(RideStatus.ONGOING)) throw new RuntimeException("Ride status is not ONGOING so cannot end the ride: "+findRide.getRideStatus());
 
         Ride savedRide = rideService.updateRideStatus(findRide,RideStatus.ENDED);
-        findRide.setEndedAt(LocalDateTime.now());
+        savedRide.setEndedAt(LocalDateTime.now());
         updateDriverAvailability(findRide.getDriver(),true);
+
+        Duration duration = Duration.between(savedRide.getStartedAt(), savedRide.getEndedAt());
+        savedRide.setDuration(duration.toMinutes());
+
 
         paymentService.processPayment(findRide);
         log.info("Ride completed");

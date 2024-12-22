@@ -2,6 +2,7 @@ package com.project.rideEase.entities;
 
 import com.project.rideEase.entities.enums.Role;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -28,6 +29,7 @@ public class User implements UserDetails {
 
     @Column(unique = true)
     @NotBlank(message = "Email is required!")
+    @Email(message = "Please provide valid email!")
     private String email;
 
     private String password;
