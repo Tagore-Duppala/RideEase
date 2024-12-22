@@ -43,7 +43,11 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 
 
 ## Database Diagram:  
-![Ride Booking Application (1)](https://github.com/user-attachments/assets/eb10e727-9bf3-4a94-a215-ff7b58bdcf80)
+![Ride Booking Application (2)](https://github.com/user-attachments/assets/df111767-81ff-4b17-b8cd-f5b78e53a29e)
+
+## Rough flow of the program:
+![Blank board](https://github.com/user-attachments/assets/6f7109c9-f1f7-420e-8ebb-52c947720dcc)
+
 
 # Why I Created This Project:
 RideEase reflects my passion for coding and my commitment to developing practical solutions that can have a positive impact on users' daily lives. It’s a project that merges my technical skills with my enthusiasm for solving real-world problems in transportation.
@@ -84,7 +88,7 @@ Feel free to contribute to this project by submitting issues, suggesting feature
 - **Payment service additions**: Adding more payment services using Razorpay API.
 - **RideFareCalculationStrategy**: Adding more fare calculating strategies for more accurate pricing.
 - **Review System Enhancements**: Improving the rating system to include reviews and more granular feedback options, verified reviews.
-- **More Transport Modes**: Bringing more transportation modes, ride sharing options and rentals.
+- **More Transport Modes**: Bringing more transportation modes, ride-sharing options and rentals.
 
 # Feedback
 I appreciate your feedback! Please open an issue on GitHub if you encounter any problems or have suggestions for improvement. Your feedback helps enhance the project for everyone. Please reach out to me at duppalatagore@gmail.com
