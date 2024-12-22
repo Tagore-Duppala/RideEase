@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Swagger UI</title>
+    <!-- Include Swagger UI CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist/swagger-ui.css">
+    <!-- Include Swagger UI JS -->
+    <script src="https://unpkg.com/swagger-ui-dist/swagger-ui-bundle.js"></script>
+</head>
+<body>
+<div id="swagger-ui"></div>
+
+<script>
+    // Initialize Swagger UI
+    SwaggerUIBundle({
+        url: "https://tagore-duppala.github.io/RideEase/swagger.json",  // Path to your swagger.json
+        dom_id: '#swagger-ui'  // ID of the div where Swagger UI will be rendered
+    });
+</script>
+</body>
+</html>

@@ -5,7 +5,7 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 
 # API Documentation(Swagger)
 ```
-http://localhost:8080/swagger-ui/index.html
+https://tagore-duppala.github.io/RideEase/
 ```
 
 # Key Features of RideEase:
