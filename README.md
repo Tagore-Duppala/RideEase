@@ -45,7 +45,7 @@ RideEase is an innovative ride-booking platform tailored to effortlessly connect
 ## Database Diagram:  
 ![Ride Booking Application (2)](https://github.com/user-attachments/assets/df111767-81ff-4b17-b8cd-f5b78e53a29e)
 
-## Rough flow of the program:
+## Rough flow of the program(Ride booking to Ride completion):
 ![Blank board](https://github.com/user-attachments/assets/6f7109c9-f1f7-420e-8ebb-52c947720dcc)
 
 
