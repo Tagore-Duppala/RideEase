@@ -3,14 +3,16 @@
 RideEase is an innovative ride-booking platform tailored to effortlessly connect travellers with reliable transportation solutions. Whether you're a commuter seeking a hassle-free ride or a driver aiming to maximize earnings, RideEase provides a seamless, intuitive, and secure environment for all. With its robust multi-user system, dedicated admin panels, and user-friendly features, RideEase transforms the traditional ride-hailing experience into a smarter and more efficient journey. By focusing on convenience, reliability, and community, RideEase redefines urban mobility for everyone involved.
 
 
-# Live Demo | API Documentation(Swagger)
-
+# API Documentation(Swagger)
+```
+http://localhost:8080/swagger-ui/index.html
+```
 
 # Key Features of RideEase:
 
 - **Multi-Driver Support**: A dynamic platform where multiple drivers can register and offer their services, giving riders access to a variety of transportation options.
 
-- **Role-Based Access Control**: Securely manage different user roles (admin, driver, passenger) to ensure a controlled and safe environment for all participants.
+- **Role-Based Access Control**: Securely manage different user roles (admin, driver, rider) to ensure a controlled and safe environment for all participants.
 
 - **Real-Time Notifications**: Riders and drivers receive instant email notifications for ride requests, confirmations, cancellations, and updates.
 
