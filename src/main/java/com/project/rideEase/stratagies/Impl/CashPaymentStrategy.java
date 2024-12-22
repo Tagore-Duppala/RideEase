@@ -9,6 +9,7 @@ import com.project.rideEase.repositories.PaymentRepository;
 import com.project.rideEase.services.WalletService;
 import com.project.rideEase.stratagies.PaymentStrategy;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 //Total payment = 100
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CashPaymentStrategy implements PaymentStrategy {
 
     private final WalletService walletService;
@@ -29,13 +31,17 @@ public class CashPaymentStrategy implements PaymentStrategy {
         double paymentAmount = payment.getAmount();
         Driver driver = payment.getRide().getDriver();
         Wallet driverWallet = walletService.findByUser(driver.getUser());
-        double driversCut = paymentAmount - (paymentAmount*PLATFORM_FEE);
+        log.info("Payment amount is: "+paymentAmount);
+        double driversCut = paymentAmount*PLATFORM_FEE;
+        log.info("Driver's cut is: "+driversCut);
+        log.info("Amount remaining after driver's cut: "+(paymentAmount-driversCut));
 
         Wallet updatedDriverWallet = walletService.deductMoneyFromWallet(driver.getUser(),
                 driversCut,null,payment.getRide(), TransactionMethod.RIDE);
 
         payment.setPaymentStatus(PaymentStatus.COMPLETED);
         paymentRepository.save(payment);
+        log.info("Payment is successful!");
 
     }
 }

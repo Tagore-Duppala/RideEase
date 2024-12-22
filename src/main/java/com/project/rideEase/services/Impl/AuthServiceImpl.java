@@ -81,6 +81,7 @@ public class AuthServiceImpl implements AuthService {
                 .user(user)
                 .rating(0.0)
                 .vehicleId(vehicleId)
+                .available(true)
                 .build();
 
         Driver savedDriver = driverService.createNewDriver(driver);
