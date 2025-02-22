@@ -26,47 +26,60 @@ public class WalletServiceImp implements WalletService {
     @Override
     @Transactional
     public Wallet addMoneyToWallet(User user, Double amount, String transactionId, Ride ride, TransactionMethod transactionMethod) {
-        Wallet wallet = findByUser(user);
 
-        wallet.setBalance(wallet.getBalance()+amount);
+        try {
+            Wallet wallet = findByUser(user);
 
-        WalletTransaction walletTransaction = WalletTransaction.builder()
-                .transactionId(transactionId)
-                .ride(ride)
-                .transactionMethod(transactionMethod)
-                .transactionType(TransactionType.CREDIT)
-                .amount(amount)
-                .wallet(wallet)
-                .build();
+            wallet.setBalance(wallet.getBalance() + amount);
 
-        walletTransactionService.createNewWalletTransaction(walletTransaction);
+            WalletTransaction walletTransaction = WalletTransaction.builder()
+                    .transactionId(transactionId)
+                    .ride(ride)
+                    .transactionMethod(transactionMethod)
+                    .transactionType(TransactionType.CREDIT)
+                    .amount(amount)
+                    .wallet(wallet)
+                    .build();
 
-        wallet.getTransactions().add(walletTransaction);
-        log.info("Money added to the Wallet");
-        return walletRepository.save(wallet);
+            walletTransactionService.createNewWalletTransaction(walletTransaction);
+
+            wallet.getTransactions().add(walletTransaction);
+            log.info("Money added to the Wallet");
+            return walletRepository.save(wallet);
+        } catch (Exception ex) {
+            log.error("Exception occurred in addMoneyToWallet , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in addMoneyToWallet: "+ex.getMessage());
+        }
     }
 
     @Override
     @Transactional
     public Wallet deductMoneyFromWallet(User user, Double amount, String transactionId, Ride ride, TransactionMethod transactionMethod) {
-        Wallet wallet = findByUser(user);
-        if(wallet.getBalance()<amount) throw new RuntimeException("There is no enough balance in the wallet, Please add money to continue, Balance: "+wallet.getBalance());
-        wallet.setBalance(wallet.getBalance()-amount);
 
-        WalletTransaction walletTransaction = WalletTransaction.builder()
-                .transactionId(transactionId)
-                .ride(ride)
-                .transactionMethod(transactionMethod)
-                .transactionType(TransactionType.DEBIT)
-                .amount(amount)
-                .wallet(wallet)
-                .build();
+        try {
+            Wallet wallet = findByUser(user);
+            if (wallet.getBalance() < amount)
+                throw new RuntimeException("There is no enough balance in the wallet, Please add money to continue, Balance: " + wallet.getBalance());
+            wallet.setBalance(wallet.getBalance() - amount);
 
-        walletTransactionService.createNewWalletTransaction(walletTransaction);
+            WalletTransaction walletTransaction = WalletTransaction.builder()
+                    .transactionId(transactionId)
+                    .ride(ride)
+                    .transactionMethod(transactionMethod)
+                    .transactionType(TransactionType.DEBIT)
+                    .amount(amount)
+                    .wallet(wallet)
+                    .build();
 
-        wallet.getTransactions().add(walletTransaction);
-        log.info("Money deducted from the wallet");
-        return walletRepository.save(wallet);
+            walletTransactionService.createNewWalletTransaction(walletTransaction);
+
+            wallet.getTransactions().add(walletTransaction);
+            log.info("Money deducted from the wallet");
+            return walletRepository.save(wallet);
+        } catch (Exception ex) {
+            log.error("Exception occurred in deductMoneyFromWallet , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in deductMoneyFromWallet: "+ex.getMessage());
+        }
     }
 
     @Override
@@ -82,13 +95,23 @@ public class WalletServiceImp implements WalletService {
 
     @Override
     public Wallet createNewWallet(User user) {
-        Wallet wallet = new Wallet();
-        wallet.setUser(user);
-        return walletRepository.save(wallet);
+        try {
+            Wallet wallet = new Wallet();
+            wallet.setUser(user);
+            return walletRepository.save(wallet);
+        } catch (Exception ex) {
+            log.error("Exception occurred in createNewWallet , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in createNewWallet: "+ex.getMessage());
+        }
     }
 
     @Override
     public Wallet findByUser(User user) {
-        return walletRepository.findByUser(user);
+        try {
+            return walletRepository.findByUser(user);
+        } catch (Exception ex) {
+            log.error("Exception occurred in findByUser , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in findByUser: "+ex.getMessage());
+        }
     }
 }

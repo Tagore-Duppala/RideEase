@@ -16,6 +16,7 @@ import com.project.rideEase.services.DriverService;
 import com.project.rideEase.services.RiderService;
 import com.project.rideEase.services.WalletService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -30,6 +31,7 @@ import static com.project.rideEase.entities.enums.Role.DRIVER;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AuthServiceImpl implements AuthService {
 
     private final ModelMapper modelMapper;
@@ -43,51 +45,73 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String[] login(String email, String password) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email,password));
+        try {
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(email, password));
 
-        User user = (User) authentication.getPrincipal();
-        String accessToken = jwtService.generateAccessToken(user);
-        String refreshToken = jwtService.generateRefreshToken(user);
+            User user = (User) authentication.getPrincipal();
+            String accessToken = jwtService.generateAccessToken(user);
+            String refreshToken = jwtService.generateRefreshToken(user);
 
-        return new String[]{accessToken, refreshToken};
+            return new String[]{accessToken, refreshToken};
+        }
+        catch (Exception ex){
+            log.error("Exception occurred while logging in, Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Error occurred while logging in, Error Msg: "+ex.getMessage());
+        }
     }
 
     @Override
     @Transactional
     public UserDto signup(SignUpDto signUpDto) {
-         User user1 = userRepository.findByEmail(signUpDto.getEmail()).orElse(null);
-         if(user1!=null) throw new
-                 ResourceNotFoundException("User already exist with email "+ signUpDto.getEmail());
 
-        User user = modelMapper.map(signUpDto,User.class);
-        user.setRoles(Set.of(Role.RIDER));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        try {
+            User user1 = userRepository.findByEmail(signUpDto.getEmail()).orElse(null);
+            if (user1 != null) throw new
+                    ResourceNotFoundException("User already exist with email " + signUpDto.getEmail());
 
-        User savedUser = userRepository.save(user); //saving details in user entity
-        Rider rider=riderService.createNewRider(user); //create new rider, saving in rider entity
+            log.info("Signing up new user!");
+            User user = modelMapper.map(signUpDto, User.class);
+            user.setRoles(Set.of(Role.RIDER));
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        walletService.createNewWallet(savedUser);
+            User savedUser = userRepository.save(user); //saving details in user entity
+            Rider rider = riderService.createNewRider(user); //create new rider, saving in rider entity
 
-        return modelMapper.map(savedUser,UserDto.class);
+            walletService.createNewWallet(savedUser);
+
+            return modelMapper.map(savedUser, UserDto.class);
+        }
+        catch (Exception ex){
+            log.error("Exception occurred in signup, Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in signup, Error Msg: "+ ex.getMessage());
+        }
     }
 
     @Override
     public DriverDto onboardNewDriver(Long userId, String vehicleId){
-        User user = userRepository.findById(userId).orElseThrow(()-> new ResourceNotFoundException("User not found with User Id: "+userId));
 
-        if(user.getRoles().contains(DRIVER)) throw new RuntimeConflictException("User is already onboarded as DRIVER");
-        user.getRoles().add(DRIVER);
-        Driver driver = Driver.builder()
-                .user(user)
-                .rating(0.0)
-                .vehicleId(vehicleId)
-                .available(true)
-                .build();
+        try {
+            User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found with User Id: " + userId));
 
-        Driver savedDriver = driverService.createNewDriver(driver);
-        userRepository.save(user);
+            if (user.getRoles().contains(DRIVER))
+                throw new RuntimeConflictException("User is already onboarded as DRIVER");
+            user.getRoles().add(DRIVER);
+            Driver driver = Driver.builder()
+                    .user(user)
+                    .rating(0.0)
+                    .vehicleId(vehicleId)
+                    .available(true)
+                    .build();
 
-        return modelMapper.map(savedDriver,DriverDto.class);
+            Driver savedDriver = driverService.createNewDriver(driver);
+            userRepository.save(user);
+
+            return modelMapper.map(savedDriver, DriverDto.class);
+        }
+        catch (Exception ex){
+            log.error("Exception occurred while onboarding new driver, Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred while onboarding new driver, Error Msg: "+ ex.getMessage());
+        }
     }
 
     @Override

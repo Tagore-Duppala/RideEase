@@ -30,7 +30,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             log.info("Email sent successfully!");
         }
         catch (Exception e){
-            log.error("Cannot send email "+ e.getMessage());
+            log.error("Cannot send email: "+ e.getMessage());
         }
 
     }
@@ -51,7 +51,7 @@ public class EmailSenderServiceImpl implements EmailSenderService {
             log.info("Email sent successfully!");
         }
         catch (Exception e){
-            log.error("Cannot send email "+ e.getMessage());
+            log.error("Cannot send email: "+ e.getMessage());
         }
 
 

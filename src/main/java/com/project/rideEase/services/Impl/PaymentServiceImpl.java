@@ -20,27 +20,44 @@ public class PaymentServiceImpl implements PaymentService {
 
     @Override
     public void processPayment(Ride ride) {
-        Payment payment = paymentRepository.findByRide(ride);
-        paymentStrategyManager.paymentMethod(ride).processPayment(payment);
-        log.info("Payment processed!");
+        try {
+            Payment payment = paymentRepository.findByRide(ride);
+            paymentStrategyManager.paymentMethod(ride).processPayment(payment);
+            log.info("Payment processed!");
+        }
+        catch (Exception ex){
+            log.error("Exception occurred in processPayment , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in processPayment: "+ex.getMessage());
+        }
     }
 
     @Override
     public Payment createPayment(Ride ride) {
-        Payment payment = Payment.builder()
-                .ride(ride)
-                .paymentStatus(PaymentStatus.PENDING)
-                .amount(ride.getFare())
-                .paymentMethod(ride.getPaymentMethod())
-                .build();
-        log.info("Payment created!");
-        return paymentRepository.save(payment);
+
+        try {
+            Payment payment = Payment.builder()
+                    .ride(ride)
+                    .paymentStatus(PaymentStatus.PENDING)
+                    .amount(ride.getFare())
+                    .paymentMethod(ride.getPaymentMethod())
+                    .build();
+            log.info("Payment created!");
+            return paymentRepository.save(payment);
+        } catch (Exception ex) {
+            log.error("Exception occurred in creatingPayment , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in creatingPayment: "+ex.getMessage());
+        }
     }
 
     @Override
     public void updatePaymentStatus(Payment payment, PaymentStatus paymentStatus) {
-        payment.setPaymentStatus(paymentStatus);
-        paymentRepository.save(payment);
-        log.info("Payment status updated!");
+        try {
+            payment.setPaymentStatus(paymentStatus);
+            paymentRepository.save(payment);
+            log.info("Payment status updated!");
+        } catch (Exception ex) {
+            log.error("Exception occurred in update payment status, Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in update payment status: "+ex.getMessage());
+        }
     }
 }

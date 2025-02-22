@@ -8,7 +8,6 @@ import com.project.rideEase.entities.*;
 import com.project.rideEase.entities.enums.RideRequestStatus;
 import com.project.rideEase.entities.enums.RideStatus;
 import com.project.rideEase.exceptions.ResourceNotFoundException;
-import com.project.rideEase.repositories.RideRepository;
 import com.project.rideEase.repositories.RideRequestRepository;
 import com.project.rideEase.repositories.RiderRepository;
 import com.project.rideEase.services.*;
@@ -42,26 +41,32 @@ public class RiderServiceImpl implements RiderService {
     @Override
     @Transactional
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
-        Rider rider  = getCurrentRider();
-        RideRequest rideRequest = modelMapper.map(rideRequestDto,RideRequest.class); //for converting PointDto in riderrqstDto to Point in RideRequestEnitiy we define a typematch in mapperconfig
-        rideRequest.setRideRequestStatus(RideRequestStatus.SEARCHING);
 
-        Double fare = rideStrategyManager.rideFareCalculationStrategy().calculateFare(rideRequest);
+        try {
+            Rider rider = getCurrentRider();
+            RideRequest rideRequest = modelMapper.map(rideRequestDto, RideRequest.class); //for converting PointDto in riderrqstDto to Point in RideRequestEnitiy we define a typematch in mapperconfig
+            rideRequest.setRideRequestStatus(RideRequestStatus.SEARCHING);
 
-        rideRequest.setRider(rider);
-        rideRequest.setFare(fare);
+            Double fare = rideStrategyManager.rideFareCalculationStrategy().calculateFare(rideRequest);
 
-        RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
+            rideRequest.setRider(rider);
+            rideRequest.setFare(fare);
 
-        List<Driver> drivers= rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(savedRideRequest);
-        List<String> driversEmail = drivers.stream()
-                .map(driverslist-> driverslist.getUser().getEmail())
-                .toList();
+            RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
 
-        log.info("List of driver emails: "+driversEmail);
+            List<Driver> drivers = rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(savedRideRequest);
+            List<String> driversEmail = drivers.stream()
+                    .map(driverslist -> driverslist.getUser().getEmail())
+                    .toList();
 
-        emailSenderService.sendEmail(driversEmail.toArray(new String[0]),emailSubjectForRideRequest(rideRequest),emailBodyForRideRequest(rideRequest));
-        return modelMapper.map(savedRideRequest,RideRequestDto.class);
+            log.info("List of driver emails: " + driversEmail);
+
+            emailSenderService.sendEmail(driversEmail.toArray(new String[0]), emailSubjectForRideRequest(rideRequest), emailBodyForRideRequest(rideRequest));
+            return modelMapper.map(savedRideRequest, RideRequestDto.class);
+        } catch (Exception ex) {
+            log.error("Exception occurred in requestRide , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in requestRide: "+ex.getMessage());
+        }
     }
 
 
@@ -69,44 +74,65 @@ public class RiderServiceImpl implements RiderService {
     @Transactional
     public RideDto cancelRide(Long rideId) {
 
-        Rider rider = getCurrentRider();
-        Ride ride = rideService.getRideById(rideId);
+        try {
+            Rider rider = getCurrentRider();
+            Ride ride = rideService.getRideById(rideId);
 
-        if(!rider.equals(ride.getRider())) throw new RuntimeException("Rider doesn't own this ride: "+rideId);
-        if(!ride.getRideStatus().equals(RideStatus.CONFIRMED)) throw new RuntimeException(("Ride cannot be cancelled as it has/is: "+ride.getRideStatus() ));
+            if (!rider.equals(ride.getRider())) throw new RuntimeException("Rider doesn't own this ride: " + rideId);
+            if (!ride.getRideStatus().equals(RideStatus.CONFIRMED))
+                throw new RuntimeException(("Ride cannot be cancelled as it has/is: " + ride.getRideStatus()));
 
-        rideService.updateRideStatus(ride,RideStatus.CANCELLED);
-        driverService.updateDriverAvailability(ride.getDriver(),true);
+            rideService.updateRideStatus(ride, RideStatus.CANCELLED);
+            driverService.updateDriverAvailability(ride.getDriver(), true);
 
-        log.info("Ride successfully cancelled by rider with id: "+ rider.getId());
-        return modelMapper.map(ride, RideDto.class);
+            log.info("Ride successfully cancelled by rider with id: " + rider.getId());
+            return modelMapper.map(ride, RideDto.class);
+        } catch (Exception ex) {
+            log.error("Exception occurred in cancelRide , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in cancelRide: "+ex.getMessage());
+        }
 
     }
 
     @Override
     @Transactional
     public RideRequestDto cancelRideRequest(Long rideRequestId) {
-        RideRequest rideRequest = rideRequestRepository.findById(rideRequestId)
-                .orElseThrow(()->new ResourceNotFoundException("RideRequest not found with Id: "+rideRequestId));
-        if(!rideRequest.getRideRequestStatus().equals(RideRequestStatus.SEARCHING)) throw new RuntimeException("Ride is already booked! Please cancel the ride instead");
-        if(!rideRequest.getRider().equals(getCurrentRider())) throw new RuntimeException("You are not authorized to cancel this ride");
 
-        rideRequest.setRideRequestStatus(RideRequestStatus.CANCELLED);
-        rideRequestRepository.save(rideRequest);
+        try {
+            RideRequest rideRequest = rideRequestRepository.findById(rideRequestId)
+                    .orElseThrow(() -> new ResourceNotFoundException("RideRequest not found with Id: " + rideRequestId));
+            if (!rideRequest.getRideRequestStatus().equals(RideRequestStatus.SEARCHING))
+                throw new RuntimeException("Ride is already booked! Please cancel the ride instead");
+            if (!rideRequest.getRider().equals(getCurrentRider()))
+                throw new RuntimeException("You are not authorized to cancel this ride");
 
-        log.info("Ride request successfully cancelled by rider with id: "+ rideRequest.getRider().getId());
-        return modelMapper.map(rideRequest,RideRequestDto.class);
+            rideRequest.setRideRequestStatus(RideRequestStatus.CANCELLED);
+            rideRequestRepository.save(rideRequest);
+
+            log.info("Ride request successfully cancelled by rider with id: " + rideRequest.getRider().getId());
+            return modelMapper.map(rideRequest, RideRequestDto.class);
+        } catch (Exception ex) {
+            log.error("Exception occurred in cancelRideRequest , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in cancelRideRequest: "+ex.getMessage());
+        }
     }
 
     @Override
     public DriverDto rateDriver(Long rideId, Double rating) {
-        Ride ride = rideService.getRideById(rideId);
 
-        if(!ride.getRideStatus().equals(RideStatus.ENDED)) throw new RuntimeException("Ride is not yet ended!");
-        if(!getCurrentRider().equals(ride.getDriver())) throw new RuntimeException("Ride doesn't belong to current rider");
+        try {
+            Ride ride = rideService.getRideById(rideId);
 
-        log.info("Thanks for you rating and feedback for driver with id: "+ ride.getDriver().getId());
-        return ratingService.rateDriver(ride,rating);
+            if (!ride.getRideStatus().equals(RideStatus.ENDED)) throw new RuntimeException("Ride is not yet ended!");
+            if (!getCurrentRider().equals(ride.getDriver()))
+                throw new RuntimeException("Ride doesn't belong to current rider");
+
+            log.info("Thanks for you rating and feedback for driver with id: " + ride.getDriver().getId());
+            return ratingService.rateDriver(ride, rating);
+        } catch (Exception ex) {
+            log.error("Exception occurred in rateDriver , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in rateDriver: "+ex.getMessage());
+        }
     }
 
     @Override
@@ -162,7 +188,12 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public String emailSubjectForRideRequest(RideRequest rideRequest) {
-        return "New Ride Requested, Fare: "+rideRequest.getFare();
+        try {
+            return "New Ride Requested, Fare: " + rideRequest.getFare();
+        } catch (Exception ex) {
+            log.error("Exception occurred in emailSubjectForRideRequest , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in emailSubjectForRideRequest: "+ex.getMessage());
+        }
     }
 
 

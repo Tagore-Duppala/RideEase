@@ -5,20 +5,26 @@ import com.project.rideEase.entities.RideRequest;
 import com.project.rideEase.repositories.DriverRepository;
 import com.project.rideEase.stratagies.DriverMatchingStrategy;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Primary;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Primary
+@Slf4j
 public class DriverMatchingNearestDriverStrategy implements DriverMatchingStrategy {
 
     private final DriverRepository driverRepository;
 
     @Override
     public List<Driver> findMatchingDriver(RideRequest rideRequest) {
-        return driverRepository.findTenNearestDrivers(rideRequest.getPickUpLocation());
+
+        try {
+            return driverRepository.findTenNearestDrivers(rideRequest.getPickUpLocation());
+        } catch (Exception ex) {
+            log.error("Exception occurred in findMatchingDriver , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in findMatchingDriver: "+ex.getMessage());
+        }
     }
 }

@@ -28,34 +28,50 @@ public class RideServiceImpl implements RideService {
 
     @Override
     public Ride getRideById(Long rideId) {
-        Ride ride = rideRepository.findById(rideId).orElseThrow(() ->
+        return rideRepository.findById(rideId).orElseThrow(() ->
                 new ResourceNotFoundException("Couldn't find Ride with Ride id: "+rideId));
-        return ride;
     }
 
 
     @Override
     public Ride createNewRide(RideRequest rideRequest, Driver driver) {
-        rideRequest.setRideRequestStatus(RideRequestStatus.CONFIRMED);
 
-        Ride ride = modelMapper.map(rideRequest,Ride.class);
-        ride.setRideStatus(RideStatus.CONFIRMED);
-        ride.setOtp(generateOTP());
-        ride.setDriver(driver);
-        rideRepository.save(ride);
-        log.info("New ride created!");
+        try {
+            rideRequest.setRideRequestStatus(RideRequestStatus.CONFIRMED);
 
-        return ride;
+            Ride ride = modelMapper.map(rideRequest, Ride.class);
+            ride.setRideStatus(RideStatus.CONFIRMED);
+            ride.setOtp(generateOTP());
+            ride.setDriver(driver);
+            rideRepository.save(ride);
+            log.info("New ride created!");
+
+            return ride;
+        } catch (Exception ex) {
+            log.error("Exception occurred in createNewRide , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in createNewRide: "+ex.getMessage());
+        }
     }
 
     @Override
     public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
-        return rideRepository.findByRider(rider,pageRequest);
+        try {
+            return rideRepository.findByRider(rider, pageRequest);
+        } catch (Exception ex) {
+            log.error("Exception occurred in getAllRidesOfRider , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception getAllRidesOfRider: "+ex.getMessage());
+        }
     }
 
     @Override
     public Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest) {
-        return rideRepository.findByDriver(driver,pageRequest);
+
+        try {
+            return rideRepository.findByDriver(driver, pageRequest);
+        } catch (Exception ex) {
+            log.error("Exception occurred in getAllRidesOfDriver , Error Msg: {}", ex.getMessage());
+            throw new RuntimeException("Exception occurred in getAllRidesOfDriver: "+ex.getMessage());
+        }
     }
 
     @Override

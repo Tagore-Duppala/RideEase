@@ -31,7 +31,7 @@ public interface DriverService {
 
     Driver createNewDriver(Driver newDriver);
 
-    String emailSubjectForAcceptRide(RideRequest rideRequest);
+    String emailSubjectForAcceptRide();
 
     String emailBodyForAcceptRide(RideRequest rideRequest, Ride ride);
 
